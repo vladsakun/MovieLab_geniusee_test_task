@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
 
+//For async coroutine functions
 abstract class ScopedActivity : AppCompatActivity(), CoroutineScope {
     private lateinit var job: Job
 

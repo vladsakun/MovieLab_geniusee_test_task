@@ -83,6 +83,9 @@ class MovieListActivity : ScopedActivity(), KodeinAware,
     //Show snackbar on connectivity changed
     override fun onNetworkConnectionChanged(isConnected: Boolean) {
         showNetworkMessage(isConnected)
+        search_Et.isFocusable = isConnected
+        search_Et.isActivated = isConnected
+        search_Et.isFocusableInTouchMode = isConnected
     }
 
     private fun showNetworkMessage(isConnected: Boolean) {
@@ -119,7 +122,9 @@ class MovieListActivity : ScopedActivity(), KodeinAware,
         movieList.observe(this@MovieListActivity, Observer {
             if (it == null) return@Observer
 
-            updateMovieAdapter(it)
+            if (search_Et.text.isEmpty()) {
+                updateMovieAdapter(it)
+            }
         })
 
         val searchedMovieList = viewModel.searchedMovies.await()
@@ -127,7 +132,9 @@ class MovieListActivity : ScopedActivity(), KodeinAware,
         searchedMovieList.observe(this@MovieListActivity, Observer {
             if (it == null) return@Observer
 
-            updateMovieAdapter(it)
+            if (search_Et.text.isNotEmpty()) {
+                updateMovieAdapter(it)
+            }
         })
 
         search_Et.addTextChangedListener(object : TextWatcher {
@@ -142,9 +149,7 @@ class MovieListActivity : ScopedActivity(), KodeinAware,
                     viewModel.searchMovie(text.toString())
                     showProgressBar(true)
                 } else {
-                    if (movieList != null) {
-                        updateMovieAdapter(movieList.value!!)
-                    }
+                    updateMovieAdapter(movieList.value!!)
                 }
             }
         })

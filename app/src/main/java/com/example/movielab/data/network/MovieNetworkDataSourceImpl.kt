@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.movielab.convertMovieListResponseToListOfEntities
 import com.example.movielab.data.db.entity.MovieEntity
 import com.example.movielab.data.exceptions.NoConnectivityException
+import com.example.movielab.data.response.CastResponse
 import com.example.movielab.data.response.MovieDetailResponse
 import com.example.movielab.data.response.MovieListResponse
 
@@ -13,7 +14,7 @@ class MovieNetworkDataSourceImpl(
     private val movieApi: MovieApiService
 ) : MovieNetworkDataSource {
 
-    val CONNECTIVITY_TAG = "Connectivity"
+    private val CONNECTIVITY_TAG = "Connectivity"
 
     private val _downloadedMovieList = MutableLiveData<MovieListResponse>()
     override val downloadedMovieList: LiveData<MovieListResponse>
@@ -52,6 +53,20 @@ class MovieNetworkDataSourceImpl(
         try {
             val fetchedMovie = movieApi.getMovie(movieId).await()
             _movie.postValue(fetchedMovie)
+        } catch (e: NoConnectivityException) {
+            Log.e(CONNECTIVITY_TAG, "No internet connection: ", e)
+        }
+    }
+
+    private val _cast = MutableLiveData<CastResponse>()
+    override val cast: LiveData<out CastResponse>
+        get() = _cast
+
+    //Get cast
+    override suspend fun getCast(movieId: Double) {
+        try {
+            val fetchedCast = movieApi.getCast(movieId).await()
+            _cast.postValue(fetchedCast)
         } catch (e: NoConnectivityException) {
             Log.e(CONNECTIVITY_TAG, "No internet connection: ", e)
         }

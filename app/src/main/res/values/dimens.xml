@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="item_offset">10dp</dimen>
+    <dimen name="progress_bar_size">20dp</dimen>
     <integer name="movie_columns">2</integer>
 </resources>

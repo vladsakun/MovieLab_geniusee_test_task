@@ -6,6 +6,7 @@ import com.example.movielab.convertMovieListResponseToListOfEntities
 import com.example.movielab.data.db.dao.MovieDao
 import com.example.movielab.data.db.entity.MovieEntity
 import com.example.movielab.data.network.MovieNetworkDataSource
+import com.example.movielab.data.response.CastResponse
 import com.example.movielab.data.response.MovieDetailResponse
 import com.example.movielab.data.response.MovieListResponse
 import kotlinx.coroutines.Dispatchers
@@ -62,7 +63,7 @@ class MovieRepositoryImpl(
         movieNetworkDataSource.searchMovie(query)
     }
 
-    override suspend fun fetchMovie(movieId: Double){
+    override suspend fun fetchMovie(movieId: Double) {
         movieNetworkDataSource.getMovie(movieId)
     }
 
@@ -75,6 +76,16 @@ class MovieRepositoryImpl(
     override suspend fun getSearchedMovies(): LiveData<out List<MovieEntity>> {
         return withContext(Dispatchers.IO) {
             return@withContext movieNetworkDataSource.searchedMovieList
+        }
+    }
+
+    override suspend fun fetchCast(movieId: Double) {
+        movieNetworkDataSource.getCast(movieId)
+    }
+
+    override suspend fun getCast(): LiveData<out CastResponse> {
+        return withContext(Dispatchers.IO) {
+            movieNetworkDataSource.cast
         }
     }
 }

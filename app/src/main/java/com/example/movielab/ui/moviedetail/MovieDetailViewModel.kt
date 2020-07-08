@@ -19,4 +19,14 @@ class MovieDetailViewModel(
             movieRepository.fetchMovie(movieId)
         }
     }
+
+    val cast by lazyDeferred {
+        movieRepository.getCast()
+    }
+
+    fun fetchCast(movieId: Double){
+        GlobalScope.launch {
+            movieRepository.fetchCast(movieId)
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.movielab.data.network
 
+import com.example.movielab.data.response.CastResponse
 import com.example.movielab.data.response.MovieDetailResponse
 import com.example.movielab.data.response.MovieListResponse
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
@@ -19,9 +20,6 @@ import java.util.*
 interface MovieApiService {
 
     //Get popular movies
-    @GET("popular")
-    fun getMoviesList(): Deferred<MovieListResponse>
-
     @GET("trending/movie/week")
     fun getTrendingMovies(): Deferred<MovieListResponse>
 
@@ -31,8 +29,8 @@ interface MovieApiService {
     @GET("movie/{movie_id}")
     fun getMovie(@Path("movie_id") movie_id: Double): Deferred<MovieDetailResponse>
 
-    @GET
-    fun loadImage(@Url url:String): Call<ResponseBody>
+    @GET("movie/{movie_id}/credits")
+    fun getCast(@Path("movie_id") movie_id: Double) : Deferred<CastResponse>
 
     companion object {
 

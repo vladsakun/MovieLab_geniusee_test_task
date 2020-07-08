@@ -6,5 +6,6 @@
     <string name="genres">Genres</string>
     <string name="cast">Cast</string>
     <string name="directors">Directors</string>
+    <string name="empty">Empty</string>
 
 </resources>
