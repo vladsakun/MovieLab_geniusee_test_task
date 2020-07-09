@@ -1,3 +1,3 @@
-# Test task for Gloice
+# Test task for Geniusee
 
-Screen cast: https://youtu.be/F7mqlCeeX94
+Screen cast: https://www.youtube.com/watch?v=7NlQGcI78Ho
