@@ -72,13 +72,6 @@ class MovieListAdapter(
             )
         }
 
-        //convert byte array to bitmap
-//        val bm = BitmapFactory.decodeByteArray(
-//            moviesArrayList[position].image,
-//            0,
-//            moviesArrayList[position].image!!.size
-//        )
-
         //Set bitmap image on movie poster
         holder.moviePoster.setImageBitmap(bm)
 

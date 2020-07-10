@@ -1,7 +1,9 @@
 package com.example.movielab.ui.movielist
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.example.movielab.data.repository.MovieRepository
+import com.example.movielab.data.repository.MovieRepositoryImpl
 import com.example.movielab.internal.lazyDeferred
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -9,8 +11,10 @@ import okhttp3.ResponseBody
 import retrofit2.Callback
 
 class MovieListViewModel(
-    private val movieRepository: MovieRepository
+    context: Context
 ) : ViewModel() {
+
+    private val movieRepository: MovieRepository = MovieRepositoryImpl(context.applicationContext)
 
     //Get movie list from db
     val movieList by lazyDeferred {

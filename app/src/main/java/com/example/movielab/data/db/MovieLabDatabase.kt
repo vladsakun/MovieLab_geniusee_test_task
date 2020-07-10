@@ -23,16 +23,18 @@ abstract class MovieLabDatabase : RoomDatabase() {
         private var instance: MovieLabDatabase? = null
         private val LOCK = Any()
 
-        operator fun invoke(context: Context) = instance ?: synchronized(LOCK) {
-            instance ?: buildDB(context).also { instance = it }
+        fun getAppDataBase(context: Context): MovieLabDatabase? {
+            if (instance == null) {
+                synchronized(MovieLabDatabase::class) {
+                    instance = Room.databaseBuilder(
+                        context.applicationContext,
+                        MovieLabDatabase::class.java,
+                        "movie.db"
+                    ).build()
+                }
+            }
+            return instance
         }
-
-        private fun buildDB(context: Context) =
-            Room.databaseBuilder(
-                context.applicationContext,
-                MovieLabDatabase::class.java, "movie.db"
-            )
-                .build()
 
     }
 

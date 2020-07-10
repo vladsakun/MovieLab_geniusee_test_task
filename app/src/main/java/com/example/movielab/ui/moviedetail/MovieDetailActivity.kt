@@ -1,11 +1,9 @@
 package com.example.movielab.ui.moviedetail
 
-import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.net.ConnectivityManager
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.text.Spanned
@@ -21,28 +19,20 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.movielab.MOVIE_MESSAGE
 import com.example.movielab.R
 import com.example.movielab.data.db.entity.MovieEntity
-import com.example.movielab.data.network.ConnectivityReceiver
 import com.example.movielab.data.response.Cast
 import com.example.movielab.data.response.Crew
 import com.example.movielab.data.response.Genre
 import com.example.movielab.ui.ScopedActivity
 import kotlinx.android.synthetic.main.activity_movie_detail.*
 import kotlinx.coroutines.launch
-import org.kodein.di.KodeinAware
-import org.kodein.di.android.closestKodein
-import org.kodein.di.generic.instance
 import java.io.ByteArrayOutputStream
-import java.lang.StringBuilder
 
-class MovieDetailActivity : ScopedActivity(), KodeinAware{
+class MovieDetailActivity : ScopedActivity(){
 
     private val TAG = "MovieDetailActivity"
 
-    //Kodein for dependency injections
-    override val kodein by closestKodein()
-
     //ViewModelFactory
-    private val viewModelFactory: MovieDetailViewModelFactory by instance()
+    private val viewModelFactory: MovieDetailViewModelFactory = MovieDetailViewModelFactory(this)
     private lateinit var viewModel: MovieDetailViewModel
 
     private lateinit var mHeaderTitle: TextView

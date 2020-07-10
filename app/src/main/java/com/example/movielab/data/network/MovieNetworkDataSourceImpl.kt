@@ -1,5 +1,6 @@
 package com.example.movielab.data.network
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,8 +12,10 @@ import com.example.movielab.data.response.MovieDetailResponse
 import com.example.movielab.data.response.MovieListResponse
 
 class MovieNetworkDataSourceImpl(
-    private val movieApi: MovieApiService
+    context: Context
 ) : MovieNetworkDataSource {
+
+    private val movieApi: MovieApiService = MovieApiService.getInstance(ConnectivityInterceptorImpl(context))!!
 
     private val CONNECTIVITY_TAG = "Connectivity"
 

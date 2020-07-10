@@ -5,7 +5,6 @@ import android.net.ConnectivityManager
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -21,21 +20,14 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.custom_progress_bar.*
 import kotlinx.android.synthetic.main.movie_list_activity.*
 import kotlinx.coroutines.launch
-import org.kodein.di.KodeinAware
-import org.kodein.di.android.closestKodein
-import org.kodein.di.generic.instance
 
-
-class MovieListActivity : ScopedActivity(), KodeinAware,
+class MovieListActivity : ScopedActivity(),
     ConnectivityReceiver.ConnectivityReceiverListener {
 
     private val TAG = "MovieListActivity"
 
-    //Kodein for dependency injections
-    override val kodein by closestKodein()
-
     //ViewModelFactory and ViewModel
-    private val viewModelFactory: MovieListViewModelFactory by instance()
+    private val viewModelFactory: MovieListViewModelFactory = MovieListViewModelFactory(this)
     private lateinit var viewModel: MovieListViewModel
 
     private lateinit var adapter: MovieListAdapter

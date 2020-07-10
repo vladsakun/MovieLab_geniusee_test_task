@@ -30,7 +30,7 @@ interface MovieApiService {
     fun getMovie(@Path("movie_id") movie_id: Double): Deferred<MovieDetailResponse>
 
     @GET("movie/{movie_id}/credits")
-    fun getCast(@Path("movie_id") movie_id: Double) : Deferred<CastResponse>
+    fun getCast(@Path("movie_id") movie_id: Double): Deferred<CastResponse>
 
     companion object {
 
@@ -39,41 +39,46 @@ interface MovieApiService {
         private const val API_KEY = "78668797853c3b31320011e0e411b0a6"
         private const val DEFAULT_PAGE_COUNT = "1"
 
-        operator fun invoke(
+        var instance: MovieApiService? = null
+
+        fun getInstance(
             connectivityInterceptor: ConnectivityInterceptor
-        ): MovieApiService {
-            val requestInterceptor = Interceptor { chain ->
+        ): MovieApiService? {
+            if (instance == null) {
+                val requestInterceptor = Interceptor { chain ->
 
-                //Add default query params for requests
-                val url = chain.request()
-                    .url()
-                    .newBuilder()
-                    .addQueryParameter("api_key", API_KEY)
-                    .addQueryParameter("language", Locale.getDefault().toLanguageTag())
+                    //Add default query params for requests
+                    val url = chain.request()
+                        .url()
+                        .newBuilder()
+                        .addQueryParameter("api_key", API_KEY)
+                        .addQueryParameter("language", Locale.getDefault().toLanguageTag())
+                        .build()
+
+                    val request = chain.request()
+                        .newBuilder()
+                        .url(url)
+                        .build()
+
+                    return@Interceptor chain.proceed(request)
+                }
+
+                //Build OkHttpClient
+                val okHttpClient = OkHttpClient.Builder()
+                    .addInterceptor(requestInterceptor)
+                    .addInterceptor(connectivityInterceptor)
                     .build()
 
-                val request = chain.request()
-                    .newBuilder()
-                    .url(url)
+                //Build Retrofit
+                instance = Retrofit.Builder()
+                    .client(okHttpClient)
+                    .baseUrl(BASE_URL)
+                    .addCallAdapterFactory(CoroutineCallAdapterFactory())
+                    .addConverterFactory(GsonConverterFactory.create())
                     .build()
-
-                return@Interceptor chain.proceed(request)
+                    .create(MovieApiService::class.java)
             }
-
-            //Build OkHttpClient
-            val okHttpClient = OkHttpClient.Builder()
-                .addInterceptor(requestInterceptor)
-                .addInterceptor(connectivityInterceptor)
-                .build()
-
-            //Build Retrofit
-            return Retrofit.Builder()
-                .client(okHttpClient)
-                .baseUrl(BASE_URL)
-                .addCallAdapterFactory(CoroutineCallAdapterFactory())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(MovieApiService::class.java)
+            return instance
         }
     }
 }

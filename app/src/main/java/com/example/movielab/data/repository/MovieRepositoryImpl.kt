@@ -3,9 +3,11 @@ package com.example.movielab.data.repository
 import android.content.Context
 import androidx.lifecycle.LiveData
 import com.example.movielab.convertMovieListResponseToListOfEntities
+import com.example.movielab.data.db.MovieLabDatabase
 import com.example.movielab.data.db.dao.MovieDao
 import com.example.movielab.data.db.entity.MovieEntity
 import com.example.movielab.data.network.MovieNetworkDataSource
+import com.example.movielab.data.network.MovieNetworkDataSourceImpl
 import com.example.movielab.data.response.CastResponse
 import com.example.movielab.data.response.MovieDetailResponse
 import com.example.movielab.data.response.MovieListResponse
@@ -16,11 +18,11 @@ import kotlinx.coroutines.withContext
 
 
 class MovieRepositoryImpl(
-    private var context: Context,
-    private val movieDao: MovieDao,
-    private val movieNetworkDataSource: MovieNetworkDataSource
-
+    private var context: Context
 ) : MovieRepository {
+
+    private val movieDao: MovieDao = MovieLabDatabase.getAppDataBase(context)!!.movieDao()
+    private val movieNetworkDataSource: MovieNetworkDataSource = MovieNetworkDataSourceImpl(context.applicationContext)
 
     init {
         context = context.applicationContext
